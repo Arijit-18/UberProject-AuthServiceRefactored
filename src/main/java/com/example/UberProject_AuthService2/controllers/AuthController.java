@@ -6,6 +6,9 @@ import com.example.UberProject_AuthService2.dto.PassengerDto;
 import com.example.UberProject_AuthService2.dto.PassengerSignupRequestDto;
 import com.example.UberProject_AuthService2.services.AuthService;
 import com.example.UberProject_AuthService2.services.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +47,7 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    //UsernamePasswordAuthenticationToken, this checks if user has successfull login or not
     @PostMapping("/signin/passenger")
     public ResponseEntity<?> signIn(@RequestBody AuthRequestDto authRequestDto, HttpServletResponse response) {
         System.out.println("fdas");
@@ -63,5 +67,13 @@ public class AuthController {
         } else {
             throw new UsernameNotFoundException("User not found");
         }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validate(HttpServletRequest request) {
+        for(Cookie cookie : request.getCookies()) {
+            System.out.println(cookie.getName() + cookie.getValue());
+        }
+        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 }
